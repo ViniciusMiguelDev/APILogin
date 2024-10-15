@@ -1,12 +1,13 @@
 import { Router, Request, Response } from "express";
 import { User } from "../models/user.model";
+import bcrypt from "bcrypt";
 
 const route = Router();
 
 interface UserProps {
   name: String;
   email: String;
-  password: String;
+  password: string;
 }
 
 //Rota de Registro
@@ -19,7 +20,20 @@ route.post("/register", async (req: Request, res: Response) => {
     return;
   }
 
-  await User.create(user);
+  if (user.password.length < 8) {
+    res
+      .status(401)
+      .json({ message: "Senha muito curta, use pelo menos 8 caractéries!" });
+    return;
+  }
+
+  const body = {
+    name: user.name,
+    email: user.email,
+    password: await bcrypt.hash(user.password, 8),
+  };
+
+  await User.create(body);
   res.status(201).json({ message: "Novo usuário cadastrado!" });
 });
 
@@ -34,8 +48,10 @@ route.post("/login", async (req: Request, res: Response) => {
     return;
   }
 
-  if (user.password !== emailBanco?.password) {
-    res.status(404).json({ message: "Senha incompatível" });
+  const validator = await bcrypt.compare(user.password, emailBanco.password);
+
+  if (!validator) {
+    res.status(401).json({ message: "Senha incompatível" });
     return;
   }
 
@@ -79,7 +95,7 @@ route.put("/ajuste/:email", async (req: Request, res: Response) => {
 //route.get("/getBanco/:email", async (req: Request, res: Response)
 route.get("/getBanco", async (req: Request, res: Response) => {
   const user = req.body as UserProps;
-  const response = await User.find();
+  const response = await User.find().select("-password");
   //const email = req.params.email
   //const response = await User.find({email})
   //const response = await User.find({email}).select("name -_id")

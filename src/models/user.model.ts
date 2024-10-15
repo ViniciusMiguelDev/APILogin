@@ -1,13 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-const { Schema } = mongoose;
+// Definir a interface para tipagem TypeScript
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  password: string;
+}
 
-const userSchema = new Schema({
-  name: String,
-  email: String,
-  password: String,
+// Definir o Schema do Mongoose
+const userSchema: Schema = new Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
 });
 
-const User = mongoose.model("User", userSchema);
-
-export { User };
+export const User = mongoose.model<IUser>("User", userSchema);
