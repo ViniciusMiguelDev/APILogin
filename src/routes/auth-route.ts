@@ -20,7 +20,7 @@ route.post("/register", async (req: Request, res: Response) => {
   }
 
   await User.create(user);
-  res.status(401).json({ message: "Novo usuário cadastrado!" });
+  res.status(201).json({ message: "Novo usuário cadastrado!" });
 });
 
 //Rota de Login
@@ -77,12 +77,13 @@ route.put("/ajuste/:email", async (req: Request, res: Response) => {
 
 //Rota retorno dos dados
 //route.get("/getBanco/:email", async (req: Request, res: Response)
-route.get("/getBanco/", async (req: Request, res: Response) => {
+route.get("/getBanco", async (req: Request, res: Response) => {
   const user = req.body as UserProps;
+  const response = await User.find();
   //const email = req.params.email
-  const response = await User.find()
   //const response = await User.find({email})
   //const response = await User.find({email}).select("name -_id")
+  //const response = await User.find().select("name email -_id")
 
   res.status(201).json({ message: response });
 });

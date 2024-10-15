@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    name: String,
-    email: String,
-    password: String
-})
+  name: String,
+  email: String,
+  password: String,
+});
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
-export { User }
+export { User };
