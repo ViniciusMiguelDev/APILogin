@@ -19,8 +19,7 @@ route.post("/register", async (req: Request, res: Response) => {
   if (emailBanco || nomeBanco) {
     res.status(401).json({ message: "Email ou usuário já cadastrado!" });
     return;
-  } 
-
+  }
 
   if (user.password.length < 8) {
     res
@@ -44,7 +43,7 @@ route.post("/login", async (req: Request, res: Response) => {
   const user = req.body as UserProps;
 
   const emailBanco = await User.findOne({ email: user.email });
-  const nameBanco = await User.findOne({ name: user.name })
+  const nameBanco = await User.findOne({ name: user.name });
 
   if (!emailBanco) {
     res.status(404).json({ message: "Usuário não encontrado" });
