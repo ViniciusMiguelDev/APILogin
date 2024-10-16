@@ -14,11 +14,13 @@ interface UserProps {
 route.post("/register", async (req: Request, res: Response) => {
   const user = req.body as UserProps;
   const emailBanco = await User.findOne({ email: user.email });
+  const nomeBanco = await User.findOne({ name: user.name });
 
-  if (emailBanco) {
-    res.status(401).json({ message: "Email já cadastrado!" });
+  if (emailBanco || nomeBanco) {
+    res.status(401).json({ message: "Email ou usuário já cadastrado!" });
     return;
-  }
+  } 
+
 
   if (user.password.length < 8) {
     res
@@ -42,6 +44,7 @@ route.post("/login", async (req: Request, res: Response) => {
   const user = req.body as UserProps;
 
   const emailBanco = await User.findOne({ email: user.email });
+  const nameBanco = await User.findOne({ name: user.name })
 
   if (!emailBanco) {
     res.status(404).json({ message: "Usuário não encontrado" });
@@ -55,7 +58,7 @@ route.post("/login", async (req: Request, res: Response) => {
     return;
   }
 
-  res.status(201).json({ message: "Login efetuado" });
+  res.status(201).json({ message: "Login efetuado", name: nameBanco });
 });
 
 //Rota de Delete

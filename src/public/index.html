@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-Br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="welcomeMessage"></h1>
+      <p>Login efetuado com sucesso.</p>
+      <button id="logoutButton">Logout</button>
+    </div>
+
+
+    <script>
+      const userName = localStorage.getItem('userName');
+      const welcomeMessage = document.getElementById('welcomeMessage');
+  
+      if (userName) {
+        welcomeMessage.textContent = `Bem-vindo, ${userName}!`;
+      } else {
+        welcomeMessage.textContent = 'Bem-vindo ao seu dashboard!';
+      }
+  
+      document.getElementById('logoutButton').addEventListener('click', () => {
+        localStorage.removeItem('userName'); 
+        window.location.href = '/login.html';
+      });
+    </script>
+  </body>
+</html>
